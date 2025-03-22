@@ -1,5 +1,7 @@
 package interfaces
 
-type IEmailService interface {
-	SendEmail(content, subject, to string) error
+import "github.com/Gabriel-Schiestl/email-service/internal/domain/models/message"
+
+type IEmailService[T any] interface {
+	SendEmail(content string, msg message.Message[T]) error
 }
