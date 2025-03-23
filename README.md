@@ -19,9 +19,11 @@ Antes de executar este projeto, certifique-se de ter o seguinte:
 ## Passo a Passo
 
 1. Clone o repositório:
-   ```sh
-   git clone https://github.com/Gabriel-Schiestl/email-service.git
-   ```
+
+```sh
+     git clone https://github.com/Gabriel-Schiestl/email-service.git
+```
+
 2. Adicione um arquivo .env na raiz do projeto com as credenciais:
 
 ```
