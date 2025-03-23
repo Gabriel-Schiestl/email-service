@@ -55,7 +55,7 @@ func main() {
 
 	defer sqlDb.Close()
 
-	senderService := services.NewEmailService[any](mailConfig)
+	senderService := services.NewEmailService(mailConfig)
 	repo := repositories.NewTemplateRepository(db)
 	useCase := usecases.NewSendEmailUseCase(repo, senderService)
 

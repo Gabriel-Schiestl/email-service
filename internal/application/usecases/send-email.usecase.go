@@ -8,20 +8,20 @@ import (
 	"github.com/rabbitmq/amqp091-go"
 )
 
-type SendEmailUseCase[T any] struct {
+type SendEmailUseCase struct {
 	Repository interfaces.ITemplateRepository
-	EmailService interfaces.IEmailService[T]
+	EmailService interfaces.IEmailService
 }
 
-func NewSendEmailUseCase[T any](repo interfaces.ITemplateRepository, sendEmailService interfaces.IEmailService[T]) *SendEmailUseCase[T] {
-	return &SendEmailUseCase[T]{
+func NewSendEmailUseCase(repo interfaces.ITemplateRepository, sendEmailService interfaces.IEmailService) *SendEmailUseCase {
+	return &SendEmailUseCase{
 		Repository: repo,
 		EmailService: sendEmailService,
 	}
 }
 
-func (s *SendEmailUseCase[T]) Execute(msg amqp091.Delivery) error {
-	var message message.Message[T]
+func (s *SendEmailUseCase) Execute(msg amqp091.Delivery) error {
+	var message message.Message
 
 	jsonerr := json.Unmarshal(msg.Body, &message)
 	if jsonerr != nil {

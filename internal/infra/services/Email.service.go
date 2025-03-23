@@ -9,17 +9,17 @@ import (
 	"gopkg.in/gomail.v2"
 )
 
-type EmailService[T any] struct {
+type EmailService struct {
 	Config *config.SenderConfig
 }
 
-func NewEmailService[T any](cfg *config.SenderConfig) *EmailService[T] {
-	return &EmailService[T]{
+func NewEmailService(cfg *config.SenderConfig) *EmailService {
+	return &EmailService{
 		Config: cfg,
 	}
 }
 
-func (e *EmailService[T]) SendEmail(content string, msg message.Message[T]) error {
+func (e *EmailService) SendEmail(content string, msg message.Message) error {
 	templ, err := template.New("email").Parse(content)
 	if err != nil {
 		return err
