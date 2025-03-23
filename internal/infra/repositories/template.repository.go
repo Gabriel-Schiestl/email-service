@@ -23,7 +23,7 @@ func (t *TemplateRepository) GetTemplateById(id int) (*interfaces.Template, erro
 
 	var template models.Template
 	if err := t.DB.First(&template, id).Error; err != nil {
-		return nil, errors.New("template não encontrado")
+		return nil, errors.New("template not found")
 	}
 
 	return mapper.ModelToDomain(template), nil

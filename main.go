@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -21,7 +20,7 @@ var numWorkers = 5
 func main() {
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatalf("Erro ao carregar env: %v", err)
+		log.Fatalf("Error loading env: %v", err)
 	}
 
 	rmq := rabbitmq.NewRabbitMQ("email-service")
@@ -29,28 +28,26 @@ func main() {
 
 	port, err := strconv.Atoi(os.Getenv("MAIL_PORT"))
 	if err != nil {
-		log.Fatalf("Erro ao converter porta para int")
+		log.Fatalf("Error converting port to int")
 	}
 
 	mailConfig := config.NewSenderConfig(os.Getenv("MAIL_HOST"), os.Getenv("MAIL_USERNAME"), os.Getenv("MAIL_PASSWORD"), port)
 
 	dbPort, err := strconv.Atoi(os.Getenv("DB_PORT"))
 	if err != nil {
-		log.Fatalf("Erro ao converter porta para int")
+		log.Fatalf("Error converting DB_PORT to int")
 	}
 
 	dbConfig := config.NewDbConfig(os.Getenv("DB_HOST"), os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_NAME"), dbPort)
 	
 	db, err := gorm.Open(postgres.Open(dbConfig.ToString()), &gorm.Config{})
 	if err != nil {
-		log.Fatalf("Erro ao conectar ao banco de dados: %v", err)
+		log.Fatalf("Error connecting to database: %v", err)
 	}
-	
-	fmt.Println("Conectado ao banco de dados")
 
 	sqlDb, err := db.DB()
 	if err != nil {
-		log.Fatalf("Erro ao obter conexão com banco: %v", err)
+		log.Fatalf("Error getting DB connection: %v", err)
 	}
 
 	defer sqlDb.Close()
@@ -61,14 +58,14 @@ func main() {
 
 	msgs, err := rmq.Consume()
 	if err != nil {
-		log.Fatalf("Falha ao consumir mensagens: %v", err)
+		log.Fatalf("Error consuming messages: %v", err)
 	}
 
 	for i := 0; i < numWorkers; i++ {
 		go func() {
 			for msg := range msgs {
 				if err := useCase.Execute(msg); err != nil {
-					log.Printf("Erro ao processar mensagem %v: %v", msg, err)
+					log.Printf("Error processing message %v: %v", msg, err)
 				}
 			}
 		}()
