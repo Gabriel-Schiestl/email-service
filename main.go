@@ -16,6 +16,8 @@ import (
 	"gorm.io/gorm"
 )
 
+var numWorkers = 5
+
 func main() {
 	err := godotenv.Load()
 	if err != nil {
@@ -60,6 +62,16 @@ func main() {
 	msgs, err := rmq.Consume()
 	if err != nil {
 		log.Fatalf("Falha ao consumir mensagens: %v", err)
+	}
+
+	for i := 0; i < numWorkers; i++ {
+		go func() {
+			for msg := range msgs {
+				if err := useCase.Execute(msg); err != nil {
+					log.Printf("Erro ao processar mensagem %v: %v", msg, err)
+				}
+			}
+		}()
 	}
 
 	for msg := range msgs {
