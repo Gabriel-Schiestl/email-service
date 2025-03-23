@@ -1,37 +1,37 @@
-# Email Service com RabbitMQ
+# Email Service with RabbitMQ
 
-Este é um projeto em Go para envio de emails. O serviço se conecta ao **RabbitMQ** para consumir mensagens e processar o envio de emails com base nas informações recebidas.
+This is a project developed in Golang in order to send emails. The service connects to **RabbitMQ** to consume messages and send emails based on the information received.
 
-## Funcionalidades
+## Features
 
-- **Envio de Emails:** Envia emails utilizando templates.
-- **Integração com RabbitMQ:** Consome mensagens de uma fila RabbitMQ para processar e enviar emails de forma assíncrona.
-- **Templates de Email:** Suporte para o envio de emails com templates personalizados.
+- **Sending Emails:** Send emails using templates.
+- **Integration with RabbitMQ:** Consume incoming messages from a RabbitMQ queue to process and send emails asynchronously.
+- **Email Templates:** Based on a database with custom templates to the emails.
 
-## Pré-requisitos
+## Prerequisites
 
-Antes de executar este projeto, certifique-se de ter o seguinte:
+Before running this project, ensure you have the following:
 
-1. **Go** - [Instale o Go](https://golang.org/dl/)
-2. **RabbitMQ** - Um servidor RabbitMQ em execução. Você pode usar [Docker](https://www.docker.com/) para subir o RabbitMQ facilmente, ou configurar uma instância própria.
-3. **Git** - Para clonar o repositório.
+1. **Go** - [Install Go](https://golang.org/dl/)
+2. **RabbitMQ** - A RabbitMQ server executing. You can use [Docker](https://www.docker.com/) to instantiate locally.
+3. **Git** - In order to clone this repository.
 
-## Passo a Passo
+## Step by step
 
-1. Clone o repositório:
+1. Clone this repository:
 
 ```sh
      git clone https://github.com/Gabriel-Schiestl/email-service.git
 ```
 
-2. Adicione um arquivo .env na raiz do projeto com as credenciais:
+2. Add a .env file in the root directory with these credentials:
 
 ```
    AMQP_URL=amqp://guest:guest@localhost:5672/
-   MAIL_HOST=smtp.seu-dominio.com
-   MAIL_PORT=sua-porta
-   MAIL_USERNAME=seu-email@dominio.com
-   MAIL_PASSWORD=sua-senha
+   MAIL_HOST=smtp.your-domain.com
+   MAIL_PORT=your-port
+   MAIL_USERNAME=your-email@domain.com
+   MAIL_PASSWORD=your-password
    DB_HOST=localhost
    DB_PORT=5432
    DB_NAME=templates
@@ -39,16 +39,19 @@ Antes de executar este projeto, certifique-se de ter o seguinte:
    DB_PASSWORD=postgres
 ```
 
-3. Instale as dependências com `go mod tidy`
-4. Execute com `go run main.go`
-5. Publique uma mensagem seguindo este padrão:
-   {
-   "to": "email.destino@dominio.com",
-   "templateId": 2,
-   "subject": "Assunto",
-   "params": {
-   "password": "test"
-   }
-   }
+3. Install the dependencies with `go mod tidy`
+4. Run the service with `go run main.go`
+5. Publish a message following this pattern(at params section you need to send all the template variables):
 
-Assim, sempre que publicar uma mensagem no RabbitMQ, esta será lida e será enviado um e-mail automático para o destinatário informado!
+```
+   {
+   "to": "email.recipient@domain.com",
+   "templateId": 2,
+   "subject": "TestSubject",
+   "params": {
+   "token": "test"
+   }
+   }
+```
+
+This way, every time you publish a message on RabbitMQ, this one will be read and and email will be sent to the recipient.
