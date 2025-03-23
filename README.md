@@ -18,24 +18,35 @@ Antes de executar este projeto, certifique-se de ter o seguinte:
 
 ## Passo a Passo
 
-1. Clone o repositório.
+1. Clone o repositório:
+   ```sh
+   git clone https://github.com/Gabriel-Schiestl/email-service.git
+   ```
 2. Adicione um arquivo .env na raiz do projeto com as credenciais:
-     MAIL_URL=smtp.seu-dominio.com
-     MAIL_PORT=587
-     MAIL_USERNAME=seu-email@dominio.com
-     MAIL_PASSWORD=sua-senha
-     DB_HOST=localhost
-     DB_PORT=5432
-     DB_NAME=templates
-     DB_USER=postgres
-     DB_PASSWORD=postgres
-4. Instale as dependências com `go mod tidy`
-5. Execute com `go run main.go`
-6. Publique uma mensagem seguindo este padrão:
-     {
-        "to": "email.destino@dominio.com",
-        "templateId": 2,
-        "subject": "Assunto"
-     }
+
+```
+   AMQP_URL=amqp://guest:guest@localhost:5672/
+   MAIL_HOST=smtp.seu-dominio.com
+   MAIL_PORT=sua-porta
+   MAIL_USERNAME=seu-email@dominio.com
+   MAIL_PASSWORD=sua-senha
+   DB_HOST=localhost
+   DB_PORT=5432
+   DB_NAME=templates
+   DB_USER=postgres
+   DB_PASSWORD=postgres
+```
+
+3. Instale as dependências com `go mod tidy`
+4. Execute com `go run main.go`
+5. Publique uma mensagem seguindo este padrão:
+   {
+   "to": "email.destino@dominio.com",
+   "templateId": 2,
+   "subject": "Assunto",
+   "params": {
+   "password": "test"
+   }
+   }
 
 Assim, sempre que publicar uma mensagem no RabbitMQ, esta será lida e será enviado um e-mail automático para o destinatário informado!
