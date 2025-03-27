@@ -2,6 +2,7 @@ package services
 
 import (
 	"bytes"
+	"fmt"
 	"html/template"
 
 	"github.com/Gabriel-Schiestl/email-service/internal/config"
@@ -20,7 +21,14 @@ func NewEmailService(cfg *config.SenderConfig) *EmailService {
 }
 
 func (e *EmailService) SendEmail(content string, msg message.Message) error {
-	templ, err := template.New("email").Parse(content)
+	templ, err := template.New("email").Funcs(template.FuncMap{
+		"param": func(params map[string]interface{}, key string) string {
+			if val, ok := params[key]; ok {
+				return fmt.Sprintf("%v", val)
+			}
+			return ""
+		},
+	}).Parse(content)
 	if err != nil {
 		return err
 	}
