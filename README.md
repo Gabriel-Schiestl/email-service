@@ -54,4 +54,4 @@ Before running this project, ensure you have the following:
    }
 ```
 
-This way, every time you publish a message on RabbitMQ, this one will be read and and email will be sent to the recipient.
+This way, every time you publish a message on RabbitMQ, this one will be read and an email will be sent to the recipient.
