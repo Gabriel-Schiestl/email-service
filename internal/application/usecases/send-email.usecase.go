@@ -28,7 +28,7 @@ func (s *SendEmailUseCase) Execute(msg amqp091.Delivery) error {
 		return jsonerr
 	}
 
-	template, err := s.Repository.GetTemplateById(message.TemplateId)
+	template, err := s.Repository.GetTemplateById(message.Data.TemplateId)
 	if err != nil {
 		return err
 	}

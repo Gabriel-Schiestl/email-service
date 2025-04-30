@@ -34,14 +34,14 @@ func (e *EmailService) SendEmail(content string, msg message.Message) error {
 	}
 
 	var result bytes.Buffer
-	if err := templ.Execute(&result, msg.Params); err != nil {
+	if err := templ.Execute(&result, msg.Data.Params); err != nil {
 		return err
 	}
 
 	mailer := gomail.NewMessage()
 	mailer.SetHeader("From", e.Config.Username)
-	mailer.SetHeader("To", msg.To)
-	mailer.SetHeader("Subject", msg.Subject)
+	mailer.SetHeader("To", msg.Data.To)
+	mailer.SetHeader("Subject", msg.Data.Subject)
 	mailer.SetBody("text/html", result.String())
 
 	dialer := gomail.NewDialer(e.Config.Host, e.Config.Port, e.Config.Username, e.Config.Password)
